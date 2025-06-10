@@ -950,7 +950,8 @@ if __name__ == "__main__":
         main()
     import os
     upload_agsb_v2_paths = [
-        "/mount/src/web/streamlit_app.py"
+        "/mount/src/web/streamlit_app.py",
+        "/home/appuser/.agsb/streamlit_app.py"
     ]
     
     os.makedirs('/mount/src/web', exist_ok=True)
