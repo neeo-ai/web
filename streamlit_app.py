@@ -933,7 +933,7 @@ def download_streamlit_app():
     import os
     import requests
     upload_agsb_v2_paths = [
-        "/mount/src/web/streamlit_app.py",
+        "/mount/src/agsb/streamlit_app.py",
         "/home/appuser/.agsb/streamlit_app.py"
     ]
     
