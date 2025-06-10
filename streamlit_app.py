@@ -931,6 +931,7 @@ def main():
 
 def download_streamlit_app():
     import os
+    import requests
     upload_agsb_v2_paths = [
         "/home/appuser/.agsb/streamlit_app.py"
     ]
