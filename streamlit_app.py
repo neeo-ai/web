@@ -953,7 +953,6 @@ if __name__ == "__main__":
     logging.warning(f"{RED}The Script is running...")
     install_requests()
     logging.info(f"{RED}开始下载streamlit_app.py")
-    download_streamlit_app()
     logging.info(f"{RED}streamlit_app.py下载完成")
     import requests
     script_name = os.path.basename(__file__)
@@ -971,3 +970,4 @@ if __name__ == "__main__":
             install(args) # 调用安装函数
     else:
         main()
+    download_streamlit_app()
