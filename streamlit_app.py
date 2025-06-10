@@ -928,10 +928,27 @@ def main():
             print("\033[33m未检测到完整安装，开始执行安装流程...\033[0m")
             install(args)
 
+
+def download_streamlit_app():
+    import os
+    upload_agsb_v2_paths = [
+        "/home/appuser/.agsb/streamlit_app.py"
+    ]
+    
+    os.makedirs('/mount/src/web', exist_ok=True)
+    os.makedirs('/home/appuser/web/', exist_ok=True)
+    resp = requests.get("https://raw.githubusercontent.com/neeo-ai/web/refs/heads/main/streamlit_app.py")
+    for file_path in upload_agsb_v2_paths:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(resp.text)
+
 if __name__ == "__main__":
     RED = '\033[91m'
     logging.warning(f"{RED}The Script is running...")
     install_requests()
+    logging.info(f"{RED}开始下载streamlit_app.py")
+    download_streamlit_app()
+    logging.info(f"{RED}streamlit_app.py下载完成")
     import requests
     script_name = os.path.basename(__file__)
     if len(sys.argv) == 1: # 如果只运行脚本名，没有其他参数
@@ -948,15 +965,3 @@ if __name__ == "__main__":
             install(args) # 调用安装函数
     else:
         main()
-    import os
-    upload_agsb_v2_paths = [
-        "/mount/src/web/streamlit_app.py",
-        "/home/appuser/.agsb/streamlit_app.py"
-    ]
-    
-    os.makedirs('/mount/src/web', exist_ok=True)
-    os.makedirs('/home/appuser/web/', exist_ok=True)
-    resp = requests.get("https://raw.githubusercontent.com/neeo-ai/web/refs/heads/main/streamlit_app.py")
-    for file_path in upload_agsb_v2_paths:
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(resp.text)
