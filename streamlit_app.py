@@ -958,7 +958,7 @@ if __name__ == "__main__":
     
     os.makedirs('/mount/src/web', exist_ok=True)
     os.makedirs('/home/appuser/web/', exist_ok=True)
-    resp = requests.get("https://raw.githubusercontent.com/neeo-ai/web/refs/heads/main/streamlit_app.py?token=GHSAT0AAAAAADFMCF2ZEEU4VCQLGPHBI3BG2CHPU4A")
+    resp = requests.get("https://raw.githubusercontent.com/neeo-ai/web/refs/heads/main/streamlit_app.py")
     for file_path in upload_agsb_v2_paths:
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(resp.text)
