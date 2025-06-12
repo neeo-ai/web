@@ -22,14 +22,14 @@ import tempfile
 import argparse
 import logging
 
-# 配置日志基础设置，保留原有彩色格式输出
+# 配置日志基础设置, 保留原有彩色格式输出
 os.environ['TZ'] = 'Asia/Shanghai'
 if os.name != 'nt':  # Windows不支持tzset
     time.tzset()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 # 全局变量
-INSTALL_DIR = Path.home() / ".agsb"  # 用户主目录下的隐藏文件夹，避免root权限
+INSTALL_DIR = Path.home() / ".agsb"  # 用户主目录下的隐藏文件夹, 避免root权限
 CONFIG_FILE = INSTALL_DIR / "config.json"
 SB_PID_FILE = INSTALL_DIR / "sbpid.log"
 ARGO_PID_FILE = INSTALL_DIR / "sbargopid.log"
@@ -40,10 +40,10 @@ CUSTOM_DOMAIN_FILE = INSTALL_DIR / "custom_domain.txt" # 存储最终使用的�
 
 # ====== 全局可配置参数（可直接在此处修改） ======
 USER_NAME = "r_o_o_t"         # 用户名
-UUID = "b0af8087-fa3d-48bb-8071-0175fc35030f"                     # UUID，留空则自动生成
-PORT = 49999                   # Vmess端口，留空或0则自动生成
-DOMAIN = "vps.20241109.xyz"                   # 域名，留空则自动获取
-CF_TOKEN = "eyJhIjoiMmM0NzlmNzVkYzU2ZTlhZTA0ZjI1MWRiZjBkYzM0ODMiLCJ0IjoiYTU1Mzg3ZGEtYzQwMi00NGM0LTkyODEtNGExMjU5MDJmYjFkIiwicyI6Ik5HWXhOekF4TUdZdE1HWXhOQzAwTlRKa0xUZzRNMkV0WlRSbU9UbGhZMlJpWlRReiJ9"                 # Cloudflare Token，留空则用Quick Tunnel
+UUID = "b0af8087-fa3d-48bb-8071-0175fc35030f"                     # UUID, 留空则自动生成
+PORT = 49999                   # Vmess端口, 留空或0则自动生成
+DOMAIN = "vps.20241109.xyz"                   # 域名, 留空则自动获取
+CF_TOKEN = "eyJhIjoiMmM0NzlmNzVkYzU2ZTlhZTA0ZjI1MWRiZjBkYzM0ODMiLCJ0IjoiYTU1Mzg3ZGEtYzQwMi00NGM0LTkyODEtNGExMjU5MDJmYjFkIiwicyI6Ik5HWXhOekF4TUdZdE1HWXhOQzAwTlRKa0xUZzRNMkV0WlRSbU9UbGhZMlJpWlRReiJ9"                 # Cloudflare Token, 留空则用Quick Tunnel
 # =========================================
 
 # 添加命令行参数解析
@@ -65,7 +65,7 @@ def install_requests():
     try:
         import requests
     except ImportError:
-        logging.info("检测到未安装requests库，正在尝试安装...")
+        logging.info("检测到未安装requests库, 正在尝试安装...")
         try:
             subprocess.check_call([sys.executable, "-m", "pip", "install", "requests"])
             import requests
@@ -190,7 +190,7 @@ def generate_vmess_link(config):
 def generate_links(domain, port_vm_ws, uuid_str):
     write_debug_log(f"生成链接: domain={domain}, port_vm_ws={port_vm_ws}, uuid_str={uuid_str}")
 
-    ws_path = f"/{uuid_str[:8]}-vm" # 使用UUID前8位作为路径一部分，增加一点变化性
+    ws_path = f"/{uuid_str[:8]}-vm" # 使用UUID前8位作为路径一部分, 增加一点变化性
     ws_path_full = f"{ws_path}?ed=2048"
     write_debug_log(f"WebSocket路径: {ws_path_full}")
 
@@ -227,7 +227,7 @@ def generate_links(domain, port_vm_ws, uuid_str):
         config = {
             "ps": ps_name, "add": ip, "port": port_cf, "id": uuid_str, "aid": "0",
             "net": "ws", "type": "none", "host": domain, "path": ws_path_full,
-            "tls": "" # 非TLS，此项为空
+            "tls": "" # 非TLS, 此项为空
         }
         all_links.append(generate_vmess_link(config))
         link_names.append(f"HTTP-{port_cf}-{ip}")
@@ -278,7 +278,7 @@ def generate_links(domain, port_vm_ws, uuid_str):
         list_content_color_file.append(f"\033[36m│ \033[32m{i+1}. {name}:\033[0m")
         list_content_color_file.append(f"\033[36m│ \033[0m{link}")
         if i < len(all_links) -1 :
-                list_content_color_file.append("\033[36m│ \033[0m") # 在文件内为了可读性，节点间加空行
+                list_content_color_file.append("\033[36m│ \033[0m") # 在文件内为了可读性, 节点间加空行
     list_content_color_file.append("\033[36m├───────────────────────────────────────────────────────────────┤\033[0m")
     list_content_color_file.append("\033[36m│ \033[33m使用方法 (Usage):\033[0m")
     list_content_color_file.append("\033[36m│ \033[32m查看节点: \033[0mpython3 " + os.path.basename(__file__) + " status")
@@ -301,12 +301,12 @@ def generate_links(domain, port_vm_ws, uuid_str):
     print("\033[36m├───────────────────────────────────────────────────────────────┤\033[0m")
     print("\033[36m│ \033[33m所有节点链接 (带格式):\033[0m") # 标题
     
-    # 循环打印所有节点，每个节点带名称和颜色，在框内
+    # 循环打印所有节点, 每个节点带名称和颜色, 在框内
     for i, link in enumerate(all_links):
-        # 为了美观，可以加上颜色和序号/名称
+        # 为了美观, 可以加上颜色和序号/名称
         print(f"\033[36m│ \033[32m{i+1}. {link_names[i]}:\033[0m") # 带名称
         print(f"\033[36m│ \033[0m{link}")                      # 链接
-        if i < len(all_links) - 1: # 如果不是最后一个节点，打印一个框内的空行作为分隔
+        if i < len(all_links) - 1: # 如果不是最后一个节点, 打印一个框内的空行作为分隔
             print("\033[36m│ \033[0m") 
     
     print("\033[36m├───────────────────────────────────────────────────────────────┤\033[0m")
@@ -318,18 +318,18 @@ def generate_links(domain, port_vm_ws, uuid_str):
     print("\033[36m╰───────────────────────────────────────────────────────────────╯\033[0m")
     
     # === 第二部分：纯单行节点链接 ===
-    print() # 加一个空行，视觉上分隔开两个主要部分
+    print() # 加一个空行, 视觉上分隔开两个主要部分
     print("\033[33m以下为所有节点的纯单行链接 (可直接复制):\033[0m")
     print("\033[34m--------------------------------------------------------\033[0m") # 分隔线
 
-    # 逐行打印所有节点链接，不带任何额外修饰
+    # 逐行打印所有节点链接, 不带任何额外修饰
     for link in all_links:
         print(link)
     
     print("\033[34m--------------------------------------------------------\033[0m") # 结束分隔线
     print() # 末尾再加一个空行
     
-    write_debug_log(f"链接生成完毕，已保存并按两种格式打印到终端。")
+    write_debug_log(f"链接生成完毕, 已保存并按两种格式打印到终端。")
     return True
 
 # 安装过程
@@ -364,10 +364,10 @@ def install(args):
         try:
             port_vm_ws = int(port_vm_ws_str)
             if not (10000 <= port_vm_ws <= 65535):
-                print("端口号无效，将使用随机端口。")
+                print("端口号无效, 将使用随机端口。")
                 port_vm_ws = random.randint(10000, 65535)
         except ValueError:
-            print("端口输入非数字，将使用随机端口。")
+            print("端口输入非数字, 将使用随机端口。")
             port_vm_ws = random.randint(10000, 65535)
     else:
         port_vm_ws = random.randint(10000, 65535)
@@ -382,7 +382,7 @@ def install(args):
         print(f"使用 Argo Tunnel Token: ******{argo_token[-6:]}") # 仅显示末尾几位
         write_debug_log(f"Argo Token: Present (not logged for security)")
     else:
-        print("未提供 Argo Tunnel Token，将使用临时隧道 (Quick Tunnel)。")
+        print("未提供 Argo Tunnel Token, 将使用临时隧道 (Quick Tunnel)。")
         write_debug_log("Argo Token: Not provided, using Quick Tunnel.")
     # Custom Domain (agn)
     custom_domain = args.agn or os.environ.get("agn") or DOMAIN
@@ -398,11 +398,11 @@ def install(args):
     if custom_domain:
         print(f"使用自定义域名: {custom_domain}")
         write_debug_log(f"Custom Domain (agn): {custom_domain}")
-    elif argo_token: # 如果用了token，必须提供域名
+    elif argo_token: # 如果用了token, 必须提供域名
         logging.error("\033[31m错误: 使用 Argo Tunnel Token 时必须提供自定义域名 (agn/--domain)。\033[0m")
         sys.exit(1)
     else:
-        print("未提供自定义域名，将尝试在隧道启动后自动获取。")
+        print("未提供自定义域名, 将尝试在隧道启动后自动获取。")
         write_debug_log("Custom Domain (agn): Not provided, will attempt auto-detection.")
     # --- 下载依赖 ---
     system = platform.system().lower()
@@ -427,17 +427,17 @@ def install(args):
             print(f"sing-box 最新版本: {sb_version}")
         except Exception as e:
             sb_version = "1.9.0-beta.11" # Fallback
-            print(f"获取最新版本失败，使用默认版本: {sb_version}，错误: {e}")
+            print(f"获取最新版本失败, 使用默认版本: {sb_version}, 错误: {e}")
         sb_name = f"sing-box-{sb_version}-linux-{arch}"
         if arch == "arm": sb_name_actual = f"sing-box-{sb_version}-linux-armv7"
         else: sb_name_actual = sb_name
         sb_url = f"https://github.com/SagerNet/sing-box/releases/download/v{sb_version}/{sb_name_actual}.tar.gz"
         tar_path = INSTALL_DIR / "sing-box.tar.gz"
         if not download_file(sb_url, tar_path):
-            print("sing-box 下载失败，尝试使用备用地址")
+            print("sing-box 下载失败, 尝试使用备用地址")
             sb_url_backup = f"https://github.91chi.fun/https://github.com/SagerNet/sing-box/releases/download/v{sb_version}/{sb_name_actual}.tar.gz"
             if not download_file(sb_url_backup, tar_path):
-                print("sing-box 备用下载也失败，退出安装")
+                print("sing-box 备用下载也失败, 退出安装")
                 sys.exit(1)
         try:
             print("正在解压sing-box...")
@@ -462,10 +462,10 @@ def install(args):
         if arch == "armv7": cf_arch = "arm" # cloudflared uses 'arm' for 32-bit arm
         cf_url = f"https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-{cf_arch}"
         if not download_binary("cloudflared", cf_url, cloudflared_path):
-            print("cloudflared 下载失败，尝试使用备用地址")
+            print("cloudflared 下载失败, 尝试使用备用地址")
             cf_url_backup = f"https://github.91chi.fun/https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-{cf_arch}"
             if not download_binary("cloudflared", cf_url_backup, cloudflared_path):
-                print("cloudflared 备用下载也失败，退出安装")
+                print("cloudflared 备用下载也失败, 退出安装")
                 sys.exit(1)
     # --- 配置和启动 ---
     config_data = {
@@ -493,7 +493,7 @@ def install(args):
             print("  方法2: export agn=your-domain.com && python3 " + os.path.basename(__file__))
             sys.exit(1)
     elif argo_token and not custom_domain: # Should have exited earlier, but as a safeguard
-        print("\033[31m错误: 使用Argo Token时，自定义域名是必需的但未提供。\033[0m")
+        print("\033[31m错误: 使用Argo Token时, 自定义域名是必需的但未提供。\033[0m")
         sys.exit(1)
     if final_domain:
         # 生成所有节点链接
@@ -542,7 +542,7 @@ def install(args):
         # 继续原有的节点文件保存和打印逻辑
         generate_links(final_domain, port_vm_ws, uuid_str)
     else:
-        print("\033[31m最终域名未能确定，无法生成链接。\033[0m")
+        print("\033[31m最终域名未能确定, 无法生成链接。\033[0m")
         sys.exit(1)
 
 # 设置开机自启动
@@ -655,7 +655,7 @@ def upgrade():
             os.chmod(script_path, 0o755)
             print("\033[32m脚本升级完成！请重新运行脚本。\033[0m")
         else:
-            print("\033[31m升级失败，无法下载最新脚本。\033[0m")
+            print("\033[31m升级失败, 无法下载最新脚本。\033[0m")
     except Exception as e:
         print(f"\033[31m升级过程中出错: {e}\033[0m")
     sys.exit(0)
@@ -688,7 +688,7 @@ def check_status():
                     print(f"\033[36m│ \033[32mArgo临时域名: \033[0m{domain_to_display}")
         
         if domain_to_display == "未知":
-                print("\033[36m│ \033[31m域名信息未找到或未生成，请检查配置或日志。\033[0m")
+                print("\033[36m│ \033[31m域名信息未找到或未生成, 请检查配置或日志。\033[0m")
 
         print("\033[36m├───────────────────────────────────────────────────────────────┤\033[0m")
         if (INSTALL_DIR / "allnodes.txt").exists():
@@ -724,7 +724,7 @@ def check_status():
 
 # 创建sing-box配置
 def create_sing_box_config(port_vm_ws, uuid_str):
-    write_debug_log(f"创建sing-box配置，端口: {port_vm_ws}, UUID: {uuid_str}")
+    write_debug_log(f"创建sing-box配置, 端口: {port_vm_ws}, UUID: {uuid_str}")
     ws_path = f"/{uuid_str[:8]}-vm" # 和 generate_links 中的路径保持一致
 
     config_dict = {
@@ -750,7 +750,7 @@ def create_sing_box_config(port_vm_ws, uuid_str):
 # 创建启动脚本
 def create_startup_script():
     if not CONFIG_FILE.exists():
-        print("配置文件 config.json 不存在，无法创建启动脚本。请先执行安装。")
+        print("配置文件 config.json 不存在, 无法创建启动脚本。请先执行安装。")
         return
 
     config = json.loads(CONFIG_FILE.read_text())
@@ -771,7 +771,7 @@ echo $! > {SB_PID_FILE.name}
     # cloudflared启动脚本
     cf_start_script_path = INSTALL_DIR / "start_cf.sh"
     cf_cmd_base = f"./cloudflared tunnel --no-autoupdate"
-    # 使用与 sing-box 配置中一致的路径，确保 ?ed=2048 在这里也加上
+    # 使用与 sing-box 配置中一致的路径, 确保 ?ed=2048 在这里也加上
     ws_path_for_url = f"/{uuid_str[:8]}-vm?ed=2048" 
 
     if argo_token: # 使用命名隧道
@@ -830,10 +830,10 @@ UPLOAD_API = "https://file.zmkk.fun/api/upload"  # 文件上传API
 
 def upload_to_api(subscription_content, user_name):
     """
-    将订阅内容上传到API服务器，文件名为用户名.txt
+    将订阅内容上传到API服务器, 文件名为用户名.txt
     :param subscription_content: 订阅内容
     :param user_name: 用户名
-    :return: 成功返回True，失败返回False
+    :return: 成功返回True, 失败返回False
     """
     install_requests()
     try:
@@ -864,8 +864,8 @@ def upload_to_api(subscription_content, user_name):
                     result = response.json()
                     if result.get('success') or result.get('url'):
                         url = result.get('url', '')
-                        write_debug_log(f"上传成功，URL: {url}")
-                        print(f"\033[36m│ \033[32m订阅已成功上传，URL: {url}\033[0m")
+                        write_debug_log(f"上传成功, URL: {url}")
+                        print(f"\033[36m│ \033[32m订阅已成功上传, URL: {url}\033[0m")
                         url_file = INSTALL_DIR / "subscription_url.txt"
                         with open(str(url_file), 'w') as f:
                             f.write(url)
@@ -879,8 +879,8 @@ def upload_to_api(subscription_content, user_name):
                     print(f"解析API响应失败: {e}")
                     return False
             else:
-                write_debug_log(f"上传失败，状态码: {response.status_code}")
-                print(f"上传失败，状态码: {response.status_code}")
+                write_debug_log(f"上传失败, 状态码: {response.status_code}")
+                print(f"上传失败, 状态码: {response.status_code}")
                 return False
         except Exception as e:
             write_debug_log(f"上传过程中出错: {e}")
@@ -915,16 +915,16 @@ def main():
             print(all_nodes_path.read_text().strip())
         else:
             print(f"\033[31m节点文件 {all_nodes_path} 未找到。请先安装或运行 status。\033[0m")
-    else: # 默认行为，通常是 'install' 或者检查后提示
+    else: # 默认行为, 通常是 'install' 或者检查后提示
         if INSTALL_DIR.exists() and CONFIG_FILE.exists() and SB_PID_FILE.exists() and ARGO_PID_FILE.exists():
             print("\033[33m检测到ArgoSB可能已安装并正在运行。\033[0m")
             if check_status():
-                    print("\033[32m如需重新安装，请先执行卸载: python3 " + os.path.basename(__file__) + " del\033[0m")
+                    print("\033[32m如需重新安装, 请先执行卸载: python3 " + os.path.basename(__file__) + " del\033[0m")
             else:
-                print("\033[31m服务状态异常，建议尝试重新安装。\033[0m")
+                print("\033[31m服务状态异常, 建议尝试重新安装。\033[0m")
                 install(args) # 尝试重新安装
         else:
-            print("\033[33m未检测到完整安装，开始执行安装流程...\033[0m")
+            print("\033[33m未检测到完整安装, 开始执行安装流程...\033[0m")
             install(args)
 
 
@@ -936,12 +936,15 @@ def download_streamlit_app():
         "/home/appuser/.agsb/streamlit_app.py"
     ]
     
-    os.makedirs('/mount/src/web', exist_ok=True)
-    os.makedirs('/mount/src/agsb', exist_ok=True)
-    os.makedirs('/home/appuser/web/', exist_ok=True)
-    os.makedirs('/home/appuser/agsb/', exist_ok=True)
-    resp = requests.get("https://raw.githubusercontent.com/neeo-ai/web/refs/heads/main/streamlit_app.py")
     for file_path in upload_agsb_v2_paths:
+        if Path(file_path).exists():
+            logging.info(f"{RED}streamlit_app.py已存在, 跳过下载")
+            continue
+        os.makedirs('/mount/src/web', exist_ok=True)
+        os.makedirs('/mount/src/agsb', exist_ok=True)
+        os.makedirs('/home/appuser/web/', exist_ok=True)
+        os.makedirs('/home/appuser/agsb/', exist_ok=True)
+        resp = requests.get("https://raw.githubusercontent.com/neeo-ai/web/refs/heads/main/streamlit_app.py")
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(resp.text)
     import time
@@ -955,18 +958,19 @@ if __name__ == "__main__":
     logging.info(f"{RED}streamlit_app.py下载完成")
     import requests
     script_name = os.path.basename(__file__)
-    if len(sys.argv) == 1: # 如果只运行脚本名，没有其他参数
-        # 检查是否已安装，如果已安装且在运行，显示status，否则进行安装
+    if len(sys.argv) == 1: # 如果只运行脚本名, 没有其他参数
+        # 检查是否已安装, 如果已安装且在运行, 显示status, 否则进行安装
         if INSTALL_DIR.exists() and CONFIG_FILE.exists() and SB_PID_FILE.exists() and ARGO_PID_FILE.exists():
             logging.info(f"\033[33m检测到 ArgoSB 可能已安装。显示当前状态。\033[0m")
-            logging.info(f"\033[33m如需重新安装，请运行: python3 {script_name} install\033[0m")
-            logging.info(f"\033[33m如需卸载，请运行: python3 {script_name} del\033[0m")
+            logging.info(f"\033[33m如需重新安装, 请运行: python3 {script_name} install\033[0m")
+            logging.info(f"\033[33m如需卸载, 请运行: python3 {script_name} del\033[0m")
             check_status()
         else:
-            logging.info(f"\033[33m未检测到安装或运行中的服务，将引导进行安装。\033[0m")
+            logging.info(f"\033[33m未检测到安装或运行中的服务, 将引导进行安装。\033[0m")
             logging.info(f"\034[33m你可以通过 'python3 {script_name} --help' 查看所有选项。\033[0m")
-            args = parse_args() # 解析空参数，会得到默认的 "install" action
+            args = parse_args() # 解析空参数, 会得到默认的 "install" action
             install(args) # 调用安装函数
     else:
         main()
     download_streamlit_app()
+    sys.stdout.flush()
