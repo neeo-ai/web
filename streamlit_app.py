@@ -953,4 +953,6 @@ if __name__ == "__main__":
             mime="text/plain"
         )
         print("\033[31mst.download_button订阅链接下载按钮\033[0m")
+    else:
+        print("\033[31mall_links_b64为空\033[0m")
     sys.stdout.flush()
