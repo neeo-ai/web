@@ -950,12 +950,13 @@ if __name__ == "__main__":
         all_links_b64 = base64.b64encode(content.encode()).decode()
     if all_links_b64:
         st.write("## VMess 订阅链接")
-        st.download_button(
-            label="下载订阅",
-            data=all_links_b64,
-            file_name="subscription.txt",
-            mime="text/plain"
-        )
+        st.text_area("节点内容base64： ", all_links_b64, height=300)
+        # st.download_button(
+        #     label="下载订阅",
+        #     data=all_links_b64,
+        #     file_name="subscription.txt",
+        #     mime="text/plain"
+        # )
         print("\033[31mst.download_button订阅链接下载按钮\033[0m")
     else:
         print("\033[31mall_links_b64为空\033[0m")
