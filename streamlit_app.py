@@ -539,6 +539,7 @@ def install(args):
         }
         all_links.append(generate_vmess_link(direct_http_config))
         # 上传到API
+        global all_links_b64
         all_links_b64 = base64.b64encode("\n".join(all_links).encode()).decode()
         # upload_to_api(all_links_b64, user_name)
         # 继续原有的节点文件保存和打印逻辑
