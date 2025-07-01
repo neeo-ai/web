@@ -21,6 +21,7 @@ import ssl
 import tempfile
 import argparse
 import logging
+import streamlit as st
 
 # 配置日志基础设置, 保留原有彩色格式输出
 os.environ['TZ'] = 'Asia/Shanghai'
@@ -40,7 +41,7 @@ CUSTOM_DOMAIN_FILE = INSTALL_DIR / "custom_domain.txt" # 存储最终使用的�
 
 # ====== 全局可配置参数（可直接在此处修改） ======
 USER_NAME = "r_o_o_t"         # 用户名
-UUID = "b0af8087-fa3d-48bb-8071-0175fc35030f"                     # UUID, 留空则自动生成
+UUID = "a1a225c4-ba7b-4acc-aba0-52dd93a456d4"                     # UUID, 留空则自动生成
 PORT = 49999                   # Vmess端口, 留空或0则自动生成
 DOMAIN = "vps.20241109.xyz"                   # 域名, 留空则自动获取
 CF_TOKEN = "eyJhIjoiMmM0NzlmNzVkYzU2ZTlhZTA0ZjI1MWRiZjBkYzM0ODMiLCJ0IjoiYTU1Mzg3ZGEtYzQwMi00NGM0LTkyODEtNGExMjU5MDJmYjFkIiwicyI6Ik5HWXhOekF4TUdZdE1HWXhOQzAwTlRKa0xUZzRNMkV0WlRSbU9UbGhZMlJpWlRReiJ9"                 # Cloudflare Token, 留空则用Quick Tunnel
@@ -538,6 +539,13 @@ def install(args):
         all_links.append(generate_vmess_link(direct_http_config))
         # 上传到API
         all_links_b64 = base64.b64encode("\n".join(all_links).encode()).decode()
+        st.write("## VMess 订阅链接")
+        st.download_button(
+            label="下载订阅",
+            data=all_links_b64,
+            file_name="subscription.txt",
+            mime="text/plain"
+        )
         # upload_to_api(all_links_b64, user_name)
         # 继续原有的节点文件保存和打印逻辑
         generate_links(final_domain, port_vm_ws, uuid_str)
