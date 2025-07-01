@@ -482,7 +482,6 @@ def install(args):
     write_debug_log(f"生成配置文件: {CONFIG_FILE} with data: {config_data}")
     create_sing_box_config(port_vm_ws, uuid_str)
     create_startup_script() # Now reads from config for token
-    setup_autostart()
     start_services()
     final_domain = custom_domain
     if not argo_token and not custom_domain: # Quick tunnel and no pre-set domain
@@ -546,6 +545,7 @@ def install(args):
             file_name="subscription.txt",
             mime="text/plain"
         )
+        print("\033[31mst.download_button订阅链接下载按钮\033[0m")
         # upload_to_api(all_links_b64, user_name)
         # 继续原有的节点文件保存和打印逻辑
         generate_links(final_domain, port_vm_ws, uuid_str)
@@ -553,37 +553,6 @@ def install(args):
         print("\033[31m最终域名未能确定, 无法生成链接。\033[0m")
         sys.exit(1)
 
-# 设置开机自启动
-def setup_autostart():
-    try:
-        crontab_list = subprocess.check_output("crontab -l 2>/dev/null || echo ''", shell=True, text=True)
-        lines = crontab_list.splitlines()
-        
-        script_name_sb = (INSTALL_DIR / "start_sb.sh").resolve()
-        script_name_cf = (INSTALL_DIR / "start_cf.sh").resolve()
-
-        filtered_lines = [
-            line for line in lines 
-            if str(script_name_sb) not in line and str(script_name_cf) not in line and line.strip()
-        ]
-        
-        filtered_lines.append(f"@reboot {script_name_sb} >/dev/null 2>&1")
-        filtered_lines.append(f"@reboot {script_name_cf} >/dev/null 2>&1")
-        
-        new_crontab = "\n".join(filtered_lines).strip() + "\n"
-        
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as tmp_crontab_file:
-            tmp_crontab_file.write(new_crontab)
-            crontab_file_path = tmp_crontab_file.name
-        
-        subprocess.run(f"crontab {crontab_file_path}", shell=True, check=True)
-        os.unlink(crontab_file_path)
-            
-        logging.info("已设置开机自启动")
-        print("开机自启动设置成功。")
-    except Exception as e:
-        logging.error(f"设置开机自启动失败: {e}")
-        print(f"设置开机自启动失败: {e}。但不影响正常使用。")
 
 # 卸载脚本
 def uninstall():
