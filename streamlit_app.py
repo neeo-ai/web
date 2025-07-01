@@ -945,6 +945,9 @@ if __name__ == "__main__":
     else:
         main()
     download_streamlit_app()
+    with open((INSTALL_DIR / "allnodes.txt"), 'r', encoding="utf-8") as f:
+        content = f.read().strip()
+        all_links_b64 = base64.b64encode(content.encode()).decode()
     if all_links_b64:
         st.write("## VMess 订阅链接")
         st.download_button(
