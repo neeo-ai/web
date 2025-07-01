@@ -47,6 +47,8 @@ DOMAIN = "vps.20241109.xyz"                   # 域名, 留空则自动获取
 CF_TOKEN = "eyJhIjoiMmM0NzlmNzVkYzU2ZTlhZTA0ZjI1MWRiZjBkYzM0ODMiLCJ0IjoiYTU1Mzg3ZGEtYzQwMi00NGM0LTkyODEtNGExMjU5MDJmYjFkIiwicyI6Ik5HWXhOekF4TUdZdE1HWXhOQzAwTlRKa0xUZzRNMkV0WlRSbU9UbGhZMlJpWlRReiJ9"                 # Cloudflare Token, 留空则用Quick Tunnel
 # =========================================
 
+all_links_b64 = ""
+
 # 添加命令行参数解析
 def parse_args():
     parser = argparse.ArgumentParser(description="ArgoSB Python3 一键脚本 (支持自定义域名和Argo Token)")
@@ -538,14 +540,6 @@ def install(args):
         all_links.append(generate_vmess_link(direct_http_config))
         # 上传到API
         all_links_b64 = base64.b64encode("\n".join(all_links).encode()).decode()
-        st.write("## VMess 订阅链接")
-        st.download_button(
-            label="下载订阅",
-            data=all_links_b64,
-            file_name="subscription.txt",
-            mime="text/plain"
-        )
-        print("\033[31mst.download_button订阅链接下载按钮\033[0m")
         # upload_to_api(all_links_b64, user_name)
         # 继续原有的节点文件保存和打印逻辑
         generate_links(final_domain, port_vm_ws, uuid_str)
@@ -950,4 +944,13 @@ if __name__ == "__main__":
     else:
         main()
     download_streamlit_app()
+    if all_links_b64:
+        st.write("## VMess 订阅链接")
+        st.download_button(
+            label="下载订阅",
+            data=all_links_b64,
+            file_name="subscription.txt",
+            mime="text/plain"
+        )
+        print("\033[31mst.download_button订阅链接下载按钮\033[0m")
     sys.stdout.flush()
